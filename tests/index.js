@@ -114,6 +114,7 @@ describe('CRUD', () => {
       }
 
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
+
         if (err) done(new Error(err))
 
         crud.list({code: 1}, PERMISSION.list, {}, (err, docs) => {
@@ -164,7 +165,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crud.get(doc_created.ops[0]._id, PERMISSION.get, {},
+        crud.get(doc_created._id, PERMISSION.get, {},
           (err, doc) => {
             if (err) return done(err)
 
@@ -194,9 +195,9 @@ describe('CRUD', () => {
           title: 'My first post modified'
         }
 
-        crud.update(doc_created.ops[0]._id, doc_update, PERMISSION.save, {}, (err, result) => {
+        crud.update(doc_created._id, doc_update, PERMISSION.save, {}, (err, result) => {
           if (err) done(new Error(err))
-          expect(result.value.title).to.be.deep.equal('My first post modified')
+          expect(result.title).to.be.deep.equal('My first post modified')
           done()
         })
       })
@@ -215,9 +216,9 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crud.delete(doc_created.ops[0]._id, PERMISSION.delete, {}, (err, result) => {
+        crud.delete(doc_created._id, PERMISSION.delete, {}, (err, result) => {
           expect(err).to.be.deep.equal(null)
-          expect(result.value.title).to.be.deep.equal('My first post')
+          expect(result.title).to.be.deep.equal('My first post')
 
           done()
         })
@@ -277,7 +278,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crudBase.get(doc_created.ops[0]._id, PERMISSION.get, {userId: 456, ownerId: doc.ownerId},
+        crudBase.get(doc_created._id, PERMISSION.get, {userId: 456, ownerId: doc.ownerId},
           (err, result) => {
             if (err) return done(err)
 
@@ -304,7 +305,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crudBase.delete(doc_created.ops[0]._id, PERMISSION.delete, {}, (err, result) => {
+        crudBase.delete(doc_created._id, PERMISSION.delete, {}, (err, result) => {
           expect(err).not.to.be.null
 
           done()
