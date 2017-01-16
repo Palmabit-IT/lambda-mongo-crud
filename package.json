@@ -1,6 +1,6 @@
 {
   "name": "lambda-mongo-crud",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Crud with mongoDb-native and RBAC role/permission for AWS Lambdas",
   "main": "index.js",
   "scripts": {
