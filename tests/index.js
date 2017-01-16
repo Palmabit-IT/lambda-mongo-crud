@@ -315,5 +315,32 @@ describe('CRUD', () => {
 
     })
   })
+
+  describe('field createdAt / updatedAt', () => {
+
+    it('should exist createdAt and updatedAt', (done) => {
+
+      let doc = {
+        code: 1,
+        title: 'My first post'
+      }
+
+      crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
+        if (err) done(new Error(err))
+
+        expect(doc_created.createdAt).not.to.be.null
+
+        let doc_update = {
+          title: 'My first post modified'
+        }
+
+        crud.update(doc_created._id, doc_update, PERMISSION.save, {}, (err, result) => {
+          if (err) done(new Error(err))
+          expect(doc_created.updateAt).not.to.be.null
+          done()
+        })
+      })
+    })
+  })
 })
 
