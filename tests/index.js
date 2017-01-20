@@ -343,5 +343,40 @@ describe('CRUD', () => {
       })
     })
   })
+
+  describe('aggregate projection list()', () => {
+
+
+    it('should return projections query', (done) => {
+
+      let doc = {
+        code: 1,
+        title: 'My first post',
+        author: {
+          name: 'Pippo',
+          family_name: 'Pluto'
+        }
+      }
+
+      crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
+        if (err) done(new Error(err))
+
+        const query = {projections: 'title,author.name'};
+
+        crud.listAggregate(query, [], PERMISSION.list, {}, (err, docs) => {
+          if (err) done(new Error(err))
+
+          expect(err).to.be.deep.equal(null)
+          assert.ok(docs[0].title)
+          assert.ok(docs[0].author.name)
+          assert.notOk(docs[0].code)
+          assert.notOk(docs[0].author.family_name)
+
+          done()
+        })
+      })
+    })
+  })
+
 })
 
