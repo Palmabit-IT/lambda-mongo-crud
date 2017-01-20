@@ -344,7 +344,7 @@ describe('CRUD', () => {
     })
   })
 
-  describe('aggregate projection list()', () => {
+  describe('projection aggregate list()', () => {
 
 
     it('should return projections query', (done) => {
@@ -372,7 +372,19 @@ describe('CRUD', () => {
           assert.notOk(docs[0].code)
           assert.notOk(docs[0].author.family_name)
 
-          done()
+          const query2 = {projections: 'title,author.name'};
+
+          crud.list(query2, PERMISSION.list, {}, (err, docs) => {
+            if (err) done(new Error(err))
+
+            expect(err).to.be.deep.equal(null)
+            assert.ok(docs[0].title)
+            assert.ok(docs[0].author.name)
+            assert.notOk(docs[0].code)
+            assert.notOk(docs[0].author.family_name)
+
+            done()
+          })
         })
       })
     })
