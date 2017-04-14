@@ -30,7 +30,7 @@ const ROLES = {
 
 describe('MANY', () => {
 
-  beforeEach((done) => {
+  before((done) => {
 
     MongoClient.connect(stringConnection, (err, db) => {
 
@@ -67,15 +67,21 @@ describe('MANY', () => {
     it('should return an array', (done) => {
 
       const data = [
+        { title: "Title 2", code: 2 },
         { title: "Title 3bis", code: 3 },
         { title: "Title 4", code: 4 },
         { title: "Title 5", code: 5 }
       ]
 
       crud.upsertMany(data, "code", PERMISSION.save, {}, (err, result) => {
-        expect(result.nInserted).to.be.equal(3)
-        expect(result.nUpserted).to.be.equal(1)
-        done()
+
+        expect(result.nMatched).to.be.equal(2)
+        expect(result.nUpserted).to.be.equal(2)
+
+        crud.list({}, PERMISSION.list, {}, (err, docs) => {
+          expect(docs.length).to.be.equal(5)
+          done()
+        })
       })
     })
   })
