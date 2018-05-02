@@ -1,5 +1,7 @@
 # lambda mongo crud
 
+[![Build Status](https://travis-ci.org/Palmabit-IT/lambda-mongo-crud.svg?branch=master)](https://travis-ci.org/Palmabit-IT/lambda-mongo-crud)
+
 Crud with mongoDb-native and RBAC role/permission for AWS Lambdas
 
 ## Installation
