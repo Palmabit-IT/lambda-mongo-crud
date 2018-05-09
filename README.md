@@ -7,13 +7,13 @@ Crud with mongoDb-native and RBAC role/permission for AWS Lambdas
 ## Installation
 
 ```
-npm install lambda-response --save
+npm install @palmabit/lambda-mongo-crud --save
 ```
 
 ## Usage
 
 ```js
-const Crud = require('lambda-mongo-crud')
+const Crud = require('@palmabit/lambda-mongo-crud')
 
 const roles = {
     base: {
