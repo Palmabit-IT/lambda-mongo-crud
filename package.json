@@ -1,6 +1,6 @@
 {
   "name": "@palmabit/lambda-mongo-crud",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Crud with mongoDb-native and RBAC role/permission for AWS Lambdas",
   "main": "index.js",
   "scripts": {
@@ -21,10 +21,10 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-subset": "^1.4.0",
     "faker": "^3.1.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "chai-subset": "^1.4.0"
+    "mocha": "^5.2.0"
   },
   "dependencies": {
     "easy-rbac": "^2.1.2",
