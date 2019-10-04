@@ -6,6 +6,7 @@ const chai = require('chai')
 const expect = chai.expect
 const assert = chai.assert
 const chaiSubset = require('chai-subset')
+const cloneDeep = require('lodash/cloneDeep')
 
 chai.use(chaiSubset)
 chai.should()
@@ -121,6 +122,26 @@ describe('CRUD', () => {
           expect(err).to.be.deep.equal(null)
           expect(docs).not.to.be.empty
           assert.equal(docs[0].title, doc.title)
+          done()
+        })
+      })
+    })
+
+    it('should not mutate query', (done) => {
+
+      let doc = {
+        code: 1,
+        title: 'My first post'
+      }
+
+      crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
+
+        if (err) done(new Error(err))
+        const queryOriginal = { code: 1, pae: 1 }
+        const queryClone = cloneDeep(queryOriginal)
+        crud.list(queryClone, PERMISSION.list, {}, (err, docs) => {
+          expect(err).to.be.deep.equal(null)
+          expect(queryClone).to.be.deep.eq(queryOriginal)
           done()
         })
       })
