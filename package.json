@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests/*.js",
-    "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec ./tests/*"
+    "test-travis": "nyc mocha --R spec ./tests/* && rm -rf .nyc_output"
   },
   "repository": {
     "type": "git",
@@ -23,12 +23,13 @@
     "chai": "^3.5.0",
     "chai-subset": "^1.4.0",
     "faker": "^3.1.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1"
   },
   "dependencies": {
     "easy-rbac": "^2.1.2",
     "lambda-errors-formatter": "^0.5.0",
+    "lodash": "^4.17.15",
     "mongodb": "2.2.16"
   }
 }
