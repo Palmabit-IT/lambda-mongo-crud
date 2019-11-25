@@ -1,6 +1,6 @@
 {
   "name": "@palmabit/lambda-mongo-crud",
-  "version": "0.5.6",
+  "version": "1.0.0",
   "description": "Crud with mongoDb-native and RBAC role/permission for AWS Lambdas",
   "main": "index.js",
   "scripts": {
