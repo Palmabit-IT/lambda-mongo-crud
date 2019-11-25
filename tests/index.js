@@ -1,6 +1,7 @@
 'use strict'
 
-const MongoClient = require('mongodb').MongoClient
+const { MongoClient } = require('mongodb')
+const muri = require('muri')
 
 const chai = require('chai')
 const expect = chai.expect
@@ -46,33 +47,26 @@ const ROLES = {
   }
 }
 
+const cleanCollection = async () => {
+  const o = muri(stringConnection)
+  const client = await MongoClient.connect(stringConnection)
+  const collection = client.db(o.db).collection(tableName);
+  await collection.deleteMany()
+  await client.close()
+}
+
 describe('CRUD', () => {
 
-  beforeEach((done) => {
-
-    MongoClient.connect(stringConnection, (err, db) => {
-
-      let collection = db.collection(tableName)
-      collection.remove()
-      db.close()
-      done()
-
-    })
+  beforeEach(async () => {
+    await cleanCollection()
   })
 
-  after((done) => {
-    MongoClient.connect(stringConnection, (err, db) => {
-
-      let collection = db.collection(tableName)
-      collection.remove()
-      db.close()
-      done()
-
-    })
+  after(async () => {
+    await cleanCollection()
   })
 
-  const crud = new Crud(stringConnection, tableName, {role: 'admin', _id: 123}, ROLES)
-  const crudBase = new Crud(stringConnection, tableName, {role: 'base', _id: 456}, ROLES)
+  const crud = new Crud(stringConnection, tableName, { role: 'admin', _id: 123 }, ROLES)
+  const crudBase = new Crud(stringConnection, tableName, { role: 'base', _id: 456 }, ROLES)
 
   it('is an instance of vehicle', () => {
     expect(crud).to.be.an.instanceof(Crud)
@@ -118,7 +112,7 @@ describe('CRUD', () => {
 
         if (err) done(new Error(err))
 
-        crud.list({code: 1}, PERMISSION.list, {}, (err, docs) => {
+        crud.list({ code: 1 }, PERMISSION.list, {}, (err, docs) => {
           expect(err).to.be.deep.equal(null)
           expect(docs).not.to.be.empty
           assert.equal(docs[0].title, doc.title)
@@ -161,7 +155,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crud.list({page: 1}, PERMISSION.list, {}, (err, result) => {
+        crud.list({ page: 1 }, PERMISSION.list, {}, (err, result) => {
           expect(err).to.be.deep.equal(null)
 
           assert.ok(result.results)
@@ -272,7 +266,7 @@ describe('CRUD', () => {
         crud.create(doc2, PERMISSION.save, {}, (err, doc_created) => {
           if (err) done(new Error(err))
 
-          const query = {ownerId: 456};
+          const query = { ownerId: 456 };
           crudBase.list(query, PERMISSION.list, {}, (err, docs) => {
             if (err) done(new Error(err))
 
@@ -299,7 +293,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crudBase.get(doc_created._id, PERMISSION.get, {userId: 456, ownerId: doc.ownerId},
+        crudBase.get(doc_created._id, PERMISSION.get, { userId: 456, ownerId: doc.ownerId },
           (err, result) => {
             if (err) return done(err)
 
@@ -382,7 +376,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        const query = {projections: 'title,author.name'};
+        const query = { projections: 'title,author.name' };
 
         crud.listAggregate(query, [], PERMISSION.list, {}, (err, docs) => {
           if (err) done(new Error(err))
@@ -393,7 +387,7 @@ describe('CRUD', () => {
           assert.notOk(docs[0].code)
           assert.notOk(docs[0].author.family_name)
 
-          const query2 = {projections: 'title,author.name'};
+          const query2 = { projections: 'title,author.name' };
 
           crud.list(query2, PERMISSION.list, {}, (err, docs) => {
             if (err) done(new Error(err))

@@ -1,7 +1,7 @@
 'use strict'
 
 const MongoClient = require('mongodb').MongoClient
-
+const muri = require('muri')
 const chai = require('chai')
 const expect = chai.expect
 const assert = chai.assert
@@ -30,27 +30,20 @@ const ROLES = {
 
 describe('MANY', () => {
 
-  before((done) => {
-
-    MongoClient.connect(stringConnection, (err, db) => {
-
-      let collection = db.collection(tableName)
-      collection.insertMany([{ title: "Title 1", code: 1 }, { title: "Title 2", code: 2 }, { title: "Title 3", code: 3 }])
-      db.close()
-      done()
-
-    })
+  before(async () => {
+    const { db: dbName } = muri(stringConnection)
+    const client = await MongoClient.connect(stringConnection)
+    const collection = client.db(dbName).collection(tableName)
+    await collection.insertMany([{ title: "Title 1", code: 1 }, { title: "Title 2", code: 2 }, { title: "Title 3", code: 3 }])
+    await client.close()
   })
 
-  after((done) => {
-    MongoClient.connect(stringConnection, (err, db) => {
-
-      let collection = db.collection(tableName)
-      collection.remove()
-      db.close()
-      done()
-
-    })
+  after(async () => {
+    const { db: dbName } = muri(stringConnection)
+    const client = await MongoClient.connect(stringConnection)
+    const collection = client.db(dbName).collection(tableName)
+    await collection.deleteMany()
+    await client.close()
   })
 
   const crud = new Crud(stringConnection, tableName, { role: 'admin', _id: 123 }, ROLES)
