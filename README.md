@@ -34,11 +34,16 @@ crud.list(query,'posts:list',roleOptions, (err,docs) => {} )
 ```
 
 ## Tests
+
+Start MongoDb locally.
+
 ```
 npm test
 ```
 
 ### Coverage
+
+Start MongoDb locally.
 
 ```
 npm run-script test-travis
