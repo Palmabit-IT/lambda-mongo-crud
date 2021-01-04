@@ -49,7 +49,7 @@ const ROLES = {
 
 const cleanCollection = async () => {
   const o = muri(stringConnection)
-  const client = await MongoClient.connect(stringConnection)
+  const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
   const collection = client.db(o.db).collection(tableName);
   await collection.deleteMany()
   await client.close()
@@ -210,7 +210,7 @@ describe('CRUD', () => {
           title: 'My first post modified'
         }
 
-        crud.update(doc_created._id, doc_update, PERMISSION.save, {}, (err, result) => {
+        crud.update({ _id: doc_created._id }, doc_update, PERMISSION.save, {}, (err, result) => {
           if (err) done(new Error(err))
           expect(result.title).to.be.deep.equal('My first post modified')
           done()
@@ -231,7 +231,7 @@ describe('CRUD', () => {
       crud.create(doc, PERMISSION.save, {}, (err, doc_created) => {
         if (err) done(new Error(err))
 
-        crud.delete(doc_created._id, PERMISSION.delete, {}, (err, result) => {
+        crud.delete({ _id: doc_created._id }, PERMISSION.delete, {}, (err, result) => {
           expect(err).to.be.deep.equal(null)
           expect(result.title).to.be.deep.equal('My first post')
 
@@ -349,7 +349,7 @@ describe('CRUD', () => {
           title: 'My first post modified'
         }
 
-        crud.update(doc_created._id, doc_update, PERMISSION.save, {}, (err, result) => {
+        crud.update({ _id: doc_created._id }, doc_update, PERMISSION.save, {}, (err, result) => {
           if (err) done(new Error(err))
           expect(doc_created.createdAt).not.to.be.null
           expect(doc_created.updateAt).not.to.be.null
