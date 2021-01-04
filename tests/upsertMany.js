@@ -32,7 +32,7 @@ describe('MANY', () => {
 
   before(async () => {
     const { db: dbName } = muri(stringConnection)
-    const client = await MongoClient.connect(stringConnection)
+    const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
     const collection = client.db(dbName).collection(tableName)
     await collection.insertMany([{ title: "Title 1", code: 1 }, { title: "Title 2", code: 2 }, { title: "Title 3", code: 3 }])
     await client.close()
@@ -40,7 +40,7 @@ describe('MANY', () => {
 
   after(async () => {
     const { db: dbName } = muri(stringConnection)
-    const client = await MongoClient.connect(stringConnection)
+    const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
     const collection = client.db(dbName).collection(tableName)
     await collection.deleteMany()
     await client.close()
