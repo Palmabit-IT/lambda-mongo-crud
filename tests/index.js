@@ -1,7 +1,7 @@
 'use strict'
 
 const { MongoClient } = require('mongodb')
-const muri = require('muri')
+const uriParser = require('mongo-url-parser');
 
 const chai = require('chai')
 const expect = chai.expect
@@ -48,9 +48,9 @@ const ROLES = {
 }
 
 const cleanCollection = async () => {
-  const o = muri(stringConnection)
+  const o = uriParser(stringConnection)
   const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
-  const collection = client.db(o.db).collection(tableName);
+  const collection = client.db(o.dbName).collection(tableName);
   await collection.deleteMany()
   await client.close()
 }
