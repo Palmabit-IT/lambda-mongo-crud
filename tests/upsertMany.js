@@ -1,7 +1,7 @@
 'use strict'
 
 const MongoClient = require('mongodb').MongoClient
-const muri = require('muri')
+const uriParser = require('mongo-url-parser');
 const chai = require('chai')
 const expect = chai.expect
 const assert = chai.assert
@@ -31,7 +31,7 @@ const ROLES = {
 describe('MANY', () => {
 
   before(async () => {
-    const { db: dbName } = muri(stringConnection)
+    const { dbName } = uriParser(stringConnection)
     const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
     const collection = client.db(dbName).collection(tableName)
     await collection.insertMany([{ title: "Title 1", code: 1 }, { title: "Title 2", code: 2 }, { title: "Title 3", code: 3 }])
@@ -39,7 +39,7 @@ describe('MANY', () => {
   })
 
   after(async () => {
-    const { db: dbName } = muri(stringConnection)
+    const { dbName } = uriParser(stringConnection)
     const client = await MongoClient.connect(stringConnection, { useUnifiedTopology: true })
     const collection = client.db(dbName).collection(tableName)
     await collection.deleteMany()
